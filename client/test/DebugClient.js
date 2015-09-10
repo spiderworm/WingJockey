@@ -22,8 +22,9 @@ export default class DebugClient {
       this._connection.addEventListener(
         'message',
         function(e) {
+          this._game.timeline.applyExport(JSON.parse(e.data));
           //console.info('got message',e.data);
-        }
+        }.bind(this)
       );
     }
   }

@@ -58,7 +58,6 @@ export default class CannonBody extends BaseBody {
     switch (shape) {
       case SHAPES.SPHERE:
         var radius = ((size.x + size.y + size.z)/3)/2;
-        console.info(size, radius);
         cannonShape = new CANNON.Sphere(radius);
       break;
       case SHAPES.BOX:
@@ -70,7 +69,6 @@ export default class CannonBody extends BaseBody {
     if (cannonShape) {
       offset = new CANNON.Vec3(offset.x, offset.y, offset.z);
       this._cannon.addShape( cannonShape, offset);
-      console.info(offset);
       this._replaceCannonBody();
     }
   }
