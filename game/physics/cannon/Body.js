@@ -1,6 +1,7 @@
 
 import BaseBody from '../base/Body';
 import CannonVec3Adapter from './CannonVec3Adapter';
+import CannonVec4Adapter from './CannonVec4Adapter';
 import CANNON from 'cannon';
 import SHAPES from '../SHAPES';
 import BODY_TYPES from '../BODY_TYPES';
@@ -109,6 +110,8 @@ export default class CannonBody extends BaseBody {
     this._position.setVector3(cannonPosition);
     var cannonVelocity = new CannonVec3Adapter(this._cannon.velocity);
     this._velocity.setVector3(cannonVelocity);
+    var cannonRotation = new CannonVec4Adapter(this._cannon.quaternion);
+    this._rotation.setVector4(cannonRotation);
   }
 
 }

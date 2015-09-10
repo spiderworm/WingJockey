@@ -30,6 +30,9 @@ export default class Timeline extends Eventer {
         if (gameObject.physics.velocity) {
           snapshot.physics.velocity = gameObject.physics.velocity.get();
         }
+        if (gameObject.physics.rotation) {
+          snapshot.physics.rotation = gameObject.physics.rotation.get();
+        }
       }
       if (gameObject.objects) {
         snapshot.objects = {};
@@ -97,6 +100,9 @@ export default class Timeline extends Eventer {
         }
         if (snapshot.physics.velocity && gameObject.physics.velocity) {
           gameObject.physics.velocity.set(snapshot.physics.velocity);
+        }
+        if (snapshot.physics.rotation && gameObject.physics.rotation) {
+          gameObject.physics.rotation.set(snapshot.physics.rotation);
         }
       }
       if (snapshot.objects) {

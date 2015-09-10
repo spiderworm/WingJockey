@@ -72,13 +72,20 @@ export default class GameObjectView extends Eventer {
   tick() {
     var three = this._three;
     var physics = this._gameObject.physics;
-    if (physics && physics.position) {
-      var position = physics.position.get();
-      position = new THREE.Vector3(position.x, position.y, position.z);
-      if (three.parent) {
-        //three.parent.worldToLocal(position);
+    if (physics) {
+      if (physics.position) {
+        var position = physics.position.get();
+        position = new THREE.Vector3(position.x, position.y, position.z);
+        if (three.parent) {
+          //three.parent.worldToLocal(position);
+        }
+        three.position.copy(position);
       }
-      three.position.copy(position);
+      if (physics.rotation) {
+        var rotation = physics.rotation.get();
+        rotation = new THREE.Quaternion(rotation.x, rotation.y, rotation.z, rotation.w);
+        three.quaternion.copy(rotation);
+      }
     }
 
     this._views.forEach(function(key, gameObjectView) {
