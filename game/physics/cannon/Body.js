@@ -9,6 +9,19 @@ export default class CannonBody extends BaseBody {
   constructor() {
     super();
     this._cannon = new CANNON.Body();
+
+    this._shapes.forEach(function(key, shape) {
+      this.__onAddShape(key, shape);
+    }.bind(this));
+
+    this._shapes.onAdd(function(key, shape) {
+      this.__onAddShape(key, shape);
+    }.bind(this));
+
+    this._shapes.onRemove(function(key, shape) {
+      this.__onRemoveShape(key);
+    }.bind(this));
+
     this._updateVectors();
   }
 
@@ -30,28 +43,36 @@ export default class CannonBody extends BaseBody {
     }
   }
 
-  addShape(shape, size, position, rotation) {
+  setCannonWorld(cannonWorld) {
+    this._cannonWorld = cannonWorld;
+  }
+
+  __onAddShape(key, shape) {
+    var size = shape.size,
+        offset = shape.position,
+        rotation = shape.rotation,
+        shape = shape.type;
+
     var cannonShape;
+
     switch (shape) {
       case SHAPES.SPHERE:
-        cannonShape = new CANNON.Sphere(
-          (size.x + size.y + size.z)/3
-        );
+        var radius = ((size.x + size.y + size.z)/3)/2;
+        console.info(size, radius);
+        cannonShape = new CANNON.Sphere(radius);
       break;
       case SHAPES.BOX:
         cannonShape = new CANNON.Box(
-          new CANNON.Vec3(size.x, size.y, size.z)
+          new CANNON.Vec3(size.x / 2, size.y / 2, size.z / 2)
         );
       break;
     }
     if (cannonShape) {
-      this._cannon.addShape(cannonShape);
+      offset = new CANNON.Vec3(offset.x, offset.y, offset.z);
+      this._cannon.addShape( cannonShape, offset);
+      console.info(offset);
       this._replaceCannonBody();
     }
-  }
-
-  setCannonWorld(cannonWorld) {
-    this._cannonWorld = cannonWorld;
   }
 
   _replaceCannonBody() {
@@ -66,9 +87,13 @@ export default class CannonBody extends BaseBody {
       quaternion: oldBody.quaternion,
       angularVelocity: oldBody.angularVelocity
     });
-    oldBody.shapes.forEach(function(cannonShape) {
-      newBody.addShape(cannonShape);
-    });
+    for (var i=0; i<oldBody.shapes.length; i++) {
+      newBody.addShape(
+        oldBody.shapes[i],
+        oldBody.shapeOffsets[i],
+        oldBody.shapeOrientations[i]
+      );
+    }
     if(this._type === BODY_TYPES.GHOST) {
       newBody.collisionFilterMask = 0;
       newBody.collisionResponse = false;
@@ -84,6 +109,8 @@ export default class CannonBody extends BaseBody {
   _updateVectors() {
     var cannonPosition = new CannonVec3Adapter(this._cannon.position);
     this._position.setVector3(cannonPosition);
+    var cannonVelocity = new CannonVec3Adapter(this._cannon.velocity);
+    this._velocity.setVector3(cannonVelocity);
   }
 
 }

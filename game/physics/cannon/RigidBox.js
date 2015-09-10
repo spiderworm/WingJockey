@@ -8,6 +8,12 @@ export default class CannonRigidSphere extends CannonBody {
   constructor(size) {
     super();
     this.type = BODY_TYPES.RIGID;
-    this.addShape(SHAPES.BOX, size);
+    this.shapes.add(
+      SHAPES.BOX,
+      new Shape(
+        SHAPES.BOX,
+        size
+      )
+    );
   }
 }

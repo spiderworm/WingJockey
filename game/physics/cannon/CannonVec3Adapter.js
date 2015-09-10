@@ -11,24 +11,13 @@ export default class CannonVec3Adapter extends BaseVector3 {
     this._cannon = cannonVec3;
   }
 
-  get() {
-    return {
-      x: this._cannon.x,
-      y: this._cannon.y,
-      z: this._cannon.z
-    };
-  }
+  get x() { return this._cannon.x; }
+  set x(val) { this._cannon.x = val; }
+  
+  get y() { return this._cannon.y; }
+  set y(val) { this._cannon.y = val; }
 
-  set(vals) {
-    if(vals.x || vals.x === 0) {
-      this._cannon.x = vals.x;
-    }
-    if(vals.y || vals.y === 0) {
-      this._cannon.y = vals.y;
-    }
-    if(vals.z || vals.z === 0) {
-      this._cannon.z = vals.z;
-    }
-  }
+  get z() { return this._cannon.z; }
+  set z(val) { this._cannon.z = val; }
 
 }
