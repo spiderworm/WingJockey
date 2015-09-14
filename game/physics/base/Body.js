@@ -1,4 +1,5 @@
 
+import Vector3 from './Vector3';
 import Position from './Position';
 import Velocity from './Velocity';
 import Rotation from './Rotation';
@@ -30,4 +31,7 @@ export default class Body {
   get shapes() { return this._shapes; }
   set shapes(s) {}
 
+  applyForce(force, point) {
+    throw new Error('must be implemented in subclass');
+  }
 }

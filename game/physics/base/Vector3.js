@@ -1,8 +1,9 @@
 
 export default class Vector3 {
   
-  constructor() {
+  constructor(vals) {
     this._x = this._y = this._z = 0;
+    this.set(vals);
   }
 
   get x() { return this._x; }

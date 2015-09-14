@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<title>game debugger</title>
+<script src="/require.js"></script>
+<script src="../environment.js"></script>
+</head>
+<body>
+
+<script>
+
+require(
+  [
+    'es6!client/debug/DebugClient'
+  ],
+  function(
+    DebugClient
+  ) {
+
+    var client = new DebugClient();
+    document.body.appendChild(client.view.element);
+
+  }
+);
+
+</script>
+
+</body>
+</html>

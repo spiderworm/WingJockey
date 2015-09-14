@@ -23,6 +23,17 @@ export default class Server {
       ws.on('error', function() {
         connection.close();
       });
+
+      var plane = this._game.objects.get('arena').objects.get('plane');
+      ws.on('message', function(raw) {
+        var messages = JSON.parse(raw);
+        messages.forEach(function(message) {
+          if (message.type === "controls") {
+            plane.controls.pitch = message.data.pitch;
+            plane.controls.roll = message.data.roll;
+          }
+        });
+      });
     }.bind(this));
 
   }

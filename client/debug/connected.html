@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<title>connected game debugger</title>
+<script src="/require.js"></script>
+<script src="../environment.js"></script>
+</head>
+<body>
+
+<script>
+
+require(
+  [
+    'es6!client/debug/ConnectedDebugClient'
+  ],
+  function(
+    ConnectedDebugClient
+  ) {
+
+    var client = new ConnectedDebugClient();
+    document.body.appendChild(client.view.element);
+
+  }
+);
+
+</script>
+
+</body>
+</html>

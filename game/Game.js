@@ -1,30 +1,27 @@
 
+import BaseGame from './base/BaseGame';
 import GameArena from "./arena/Arena";
 import GameBall from './ball/Ball';
+import Plane from './plane/Plane';
 import Timeline from './Timeline';
-import Collection from '../shared/Collection';
 
-export default class Game {
+export default class Game extends BaseGame {
   constructor() {
-    this._timeline = new Timeline(this);
-    this._objects = new Collection();
+    var arena = new GameArena();
 
-    var arena = this._arena = new GameArena();
+    super(arena);
+
     arena.objects.add('ball',new GameBall());
-    this.objects.add('arena', arena);
+
+    var plane = new Plane();
+    var slot = arena.getSlot(0,0);
+    plane.physics.position.set(slot.position);
+    plane.physics.rotation.set(slot.rotation);
+    arena.objects.add('plane',plane);
+
+    this._timeline = new Timeline(this);
   }
 
-  get timeline() {
-    return this._timeline;
-  }
-
+  get timeline() { return this._timeline; }
   set timeline(t) {}
-
-  get objects() { return this._objects; }
-  set objects(o) {}
-
-  start() {
-    this._arena.start();
-  }
-
 }

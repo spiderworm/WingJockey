@@ -22,6 +22,13 @@ export default class World {
     }
   }
 
+  stop() {
+    if (this._running) {
+      this._running = false;
+      clearInterval(this._interval);
+    }
+  }
+
   _nextDelta() {
     var time = +(new Date());
     var delta = time - this._lastTime;

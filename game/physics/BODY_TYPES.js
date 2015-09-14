@@ -1,7 +1,8 @@
 
 var BODY_TYPES = {
   RIGID: 'RIGID',
-  GHOST: 'GHOST'
+  GHOST: 'GHOST',
+  STATIC: 'STATIC'
 };
 
 export default BODY_TYPES;

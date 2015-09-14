@@ -1,7 +1,8 @@
 
-import Eventer from '../../../shared/Eventer';
-import GameObjectCollectionViews from './GameObjectCollectionViews';
-import SHAPES from '../../../game/physics/SHAPES';
+import Eventer from '../../shared/Eventer';
+import GameObjectCollectionViews from './DebugGameObjectCollectionViews';
+import SHAPES from '../../game/physics/SHAPES';
+import THREE from 'three';
 
 export default class GameObjectView extends Eventer {
   
@@ -19,10 +20,19 @@ export default class GameObjectView extends Eventer {
         switch(shape.type) {
           case SHAPES.SPHERE:
             var radius = ((shape.size.x + shape.size.y + shape.size.z) / 3) / 2;
-            newGeometry = new THREE.SphereGeometry(radius);
+            var segments = Math.min(50,Math.ceil(radius / 15));
+            newGeometry = new THREE.SphereGeometry(radius, segments, segments);
           break;
           case SHAPES.BOX:
-            newGeometry = new THREE.BoxGeometry(shape.size.x, shape.size.y, shape.size.z);
+            var segments = {
+              x: Math.min(20, Math.ceil(shape.size.x / 25)),
+              y: Math.min(20, Math.ceil(shape.size.y / 25)),
+              z: Math.min(20, Math.ceil(shape.size.z / 25))
+            };
+            newGeometry = new THREE.BoxGeometry(
+              shape.size.x, shape.size.y, shape.size.z,
+              segments.x, segments.y, segments.z
+            );
           break;
         }
         if (newGeometry) {

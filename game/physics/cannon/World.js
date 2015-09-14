@@ -13,8 +13,8 @@ export default class CannonWorld extends World {
   }
 
   tick() {
-    var delta = this._nextDelta();
-    this._cannon.step(delta / 1000);
+    var delta = this._nextDelta() / 1000;
+    this._cannon.step(delta, delta, 20);
   }
 
   add(cannonBody) {

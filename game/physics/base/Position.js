@@ -7,6 +7,13 @@ export default class Position {
     this.setVector3(vector3 || new Vector3());
   }
 
+  get x() { return this._vector3.x; }
+  set x(v) { this._vector3.x = v; }
+  get y() { return this._vector3.y; }
+  set y(v) { this._vector3.y = v; }
+  get z() { return this._vector3.z; }
+  set z(v) { this._vector3.z = v; }
+
   get() {
     return this._vector3.get();
   }

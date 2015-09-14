@@ -40,6 +40,12 @@ export default class Timeline extends Eventer {
           snapshot.objects[key] = getSnapshot(obj);
         });
       }
+      if (gameObject.controls) {
+        snapshot.controls = {
+          pitch: gameObject.controls.pitch,
+          roll: gameObject.controls.roll
+        }
+      }
       return snapshot;
     }
 
@@ -104,6 +110,12 @@ export default class Timeline extends Eventer {
         if (snapshot.physics.rotation && gameObject.physics.rotation) {
           gameObject.physics.rotation.set(snapshot.physics.rotation);
         }
+      }
+      if (snapshot.controls && gameObject.controls) {
+        /*
+        gameObject.controls.pitch = snapshot.controls.pitch;
+        gameObject.controls.roll = snapshot.controls.roll;
+        */
       }
       if (snapshot.objects) {
         for (var name in snapshot.objects) {

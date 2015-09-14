@@ -1,5 +1,5 @@
 
-import GameObjectView from './GameObjectView';
+import GameObjectView from './DebugGameObjectView';
 
 export default class GameView extends GameObjectView {
 

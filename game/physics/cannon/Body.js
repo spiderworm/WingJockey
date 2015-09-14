@@ -1,5 +1,6 @@
 
 import BaseBody from '../base/Body';
+import Vector3 from '../base/Vector3';
 import CannonVec3Adapter from './CannonVec3Adapter';
 import CannonVec4Adapter from './CannonVec4Adapter';
 import CANNON from 'cannon';
@@ -48,6 +49,14 @@ export default class CannonBody extends BaseBody {
     this._cannonWorld = cannonWorld;
   }
 
+  applyForce(force, point) {
+    point = point || new Vector3();
+    this._cannon.applyLocalForce(
+      new CANNON.Vec3(force.x, force.y, force.z),
+      new CANNON.Vec3(point.x, point.y, point.z)
+    );
+  }
+
   __onAddShape(key, shape) {
     var size = shape.size,
         offset = shape.position,
@@ -77,14 +86,17 @@ export default class CannonBody extends BaseBody {
   _replaceCannonBody() {
     var oldBody = this._cannon;
     var newBody = new CANNON.Body({
-      linearDamping: 0,
-      damping: 0,
-      angularDamping: 0,
+      type: this.type === BODY_TYPES.STATIC ? CANNON.Body.STATIC : CANNON.Body.DYNAMIC,
+      linearDamping: oldBody.linearDamping,
+      damping: oldBody.damping,
+      angularDamping: oldBody.angularDamping,
       mass: oldBody.mass,
       position: oldBody.position,
       velocity: oldBody.velocity,
       quaternion: oldBody.quaternion,
-      angularVelocity: oldBody.angularVelocity
+      angularVelocity: oldBody.angularVelocity,
+      collisionFilterMask: oldBody.collisionFilterMask,
+      collisionFilterGroup: oldBody.collisionFilterGroup
     });
     for (var i=0; i<oldBody.shapes.length; i++) {
       newBody.addShape(

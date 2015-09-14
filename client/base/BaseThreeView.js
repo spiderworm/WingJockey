@@ -1,21 +1,19 @@
 
 import THREE from 'three';
-import GameView from './GameView';
 
-export default class DebugView {
-  constructor(game) {
+export default class BaseThreeView {
+  constructor(gameView) {
 
-    this._gameView = new GameView('game',game);
+    this._gameView = gameView;
 
     this._scene = new THREE.Scene();
     this._scene.add(this._gameView.three);
-    window.scene = this._scene;
 
     this._camera = new THREE.PerspectiveCamera(
-      40,
+      60,
       window.innerWidth / window.innerHeight,
       1,
-      99999999999
+      1e20
     );
     this._camera.position.y = 1000;
     this._camera.up.set( 0, 0, 1 );
@@ -37,18 +35,24 @@ export default class DebugView {
   get element() { return this._element; }
   set element(e) {}
 
+  get three() { return this._scene; }
+  set three(t) {}
+
+  get scene() { return this._scene; }
+  set scene(s) {}
+
+  setCameraTarget(gameObjectView, position, lookAt) {
+    position = position || {x: 0, y: 0, z: 0};
+    lookAt = lookAt || {x: 0, y: 1, z: 0};
+    gameObjectView.three.add(this._camera);
+    this._camera.position.set(position.x, position.y, position.z);
+    this._camera.lookAt(
+      new THREE.Vector3(lookAt.x, lookAt.y, lookAt.z)
+    );
+  }
+
   render() {
     this._gameView.tick();
-
-    var arena = this._gameView.views.get('arena');
-    if (arena) {
-      var ball = arena.views.get('ball');
-      if (ball) {
-        this._camera.lookAt( ball.three.position );
-      }
-    }
-
-    //console.info(this._gameView.views.get('arena').views.get('ball').three.position);
     this._renderer.render(
       this._scene,
       this._camera

@@ -3,11 +3,18 @@ import Body from '../../physics/Body';
 import GameObject from '../../GameObject';
 import SHAPES from '../../physics/SHAPES';
 import Shape from '../../physics/Shape';
+import BODY_TYPES from '../../physics/BODY_TYPES';
 
 export default class ArenaWallsPhysics extends Body {
 
   constructor(size, wallWidth) {
     super();
+
+    this.type = BODY_TYPES.STATIC;
+
+    // TODO: don't access cannon directly
+    this._cannon.collisionFilterGroup = 2;
+    this._cannon.collisionFilterMask = 2;
 
     this.shapes.add(
       'ceiling',
@@ -111,7 +118,6 @@ export default class ArenaWallsPhysics extends Body {
         }
       )
     );
-
 
   }
 

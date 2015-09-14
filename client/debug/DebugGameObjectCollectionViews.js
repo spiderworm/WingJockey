@@ -1,12 +1,12 @@
 
-import Collection from '../../../shared/Collection';
+import Collection from '../../shared/Collection';
 
 export default class GameObjectCollectionViews extends Collection {
 
   constructor(gameObjectCollection) {
     super();
 
-    require(['es6!client/views/debug/GameObjectView'], function(GameObjectView) {
+    require(['es6!client/debug/DebugGameObjectView'], function(GameObjectView) {
 
       gameObjectCollection.forEach(function(key, gameObject) {
         var view = new GameObjectView(key, gameObject);

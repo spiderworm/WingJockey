@@ -34,15 +34,17 @@ export default class ServerGameComm extends Eventer {
       function() {
         game.timeline.prepareSnapshot();
       }.bind(this),
-      1000
+      100
     );
-
+/*
     setInterval(
       function() {
         game.timeline.prepareUpdate();
       }.bind(this),
       30
     );
+*/
+
   }
 
 }

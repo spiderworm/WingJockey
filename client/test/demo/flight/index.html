@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<title>flight testing</title>
+<script src="/require.js"></script>
+<script src="../../../environment.js"></script>
+</head>
+<body>
+
+<script>
+
+require(
+  [
+    'es6!client/test/demo/flight/FlightClient'
+  ],
+  function(
+    FlightClient
+  ) {
+
+    var client = new FlightClient();
+    document.body.appendChild(client.view.element);
+
+  }
+);
+
+</script>
+
+</body>
+</html>
