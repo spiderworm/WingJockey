@@ -95,6 +95,7 @@ export default class CannonBody extends BaseBody {
       velocity: oldBody.velocity,
       quaternion: oldBody.quaternion,
       angularVelocity: oldBody.angularVelocity,
+      material: oldBody.material,
       collisionFilterMask: oldBody.collisionFilterMask,
       collisionFilterGroup: oldBody.collisionFilterGroup
     });

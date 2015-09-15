@@ -16,13 +16,11 @@ export default class FlightGameView extends BaseThreeView {
     this.three.add(background);
 
     setTimeout(function() {
-      var plane = game.objects.get('arena').objects.get('plane');
-      var planeView = gameView.views.get('arena').views.get('plane');
-      this.setCameraTarget(
-        planeView,
-        {x: 0, y: -10, z: 1},
-        {x: 0, y: 0, z: 0}
-      );
+      var arenaView = gameView.views.get('arena');
+      var wallsView = arenaView.views.get('walls');
+      var planeView = arenaView.views.get('plane');
+      this.setCameraHost(planeView, {x: 0, y: -20, z: 0});
+      this.setCameraTarget(wallsView, 20);
     }.bind(this), 1000);
   }
 }

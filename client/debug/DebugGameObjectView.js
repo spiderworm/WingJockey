@@ -79,6 +79,9 @@ export default class GameObjectView extends Eventer {
   get views() { return this._views; }
   set views(v) {}
 
+  get physics() { return this._gameObject.physics; }
+  set physics(p) {}
+
   tick() {
     var three = this._three;
     var physics = this._gameObject.physics;

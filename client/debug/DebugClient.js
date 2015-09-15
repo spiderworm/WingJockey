@@ -2,7 +2,7 @@
 import BaseClient from '../base/BaseClient';
 import Game from "../../game/Game";
 import DebugView from "./DebugView";
-import DebugInput from "./DebugClientInput";
+import BaseInput from "../base/BaseInput";
 import THREE from 'three';
 
 export default class DebugClient extends BaseClient {
@@ -11,7 +11,7 @@ export default class DebugClient extends BaseClient {
     var game = new Game();
     game.start();
     var view = new DebugView(game);
-    var input = new DebugInput(game);
+    var input = new BaseInput(game);
     var plane = game.objects.get('arena').objects.get('plane');
 
     super(game, view, input, plane);

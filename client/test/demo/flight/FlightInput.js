@@ -1,4 +1,4 @@
 
-import DebugClientInput from '../../../debug/DebugClientInput';
+import DebugClientInput from '../../../base/BaseInput';
 
 export default class DebugInput extends DebugClientInput {}

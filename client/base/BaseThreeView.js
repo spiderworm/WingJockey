@@ -1,5 +1,6 @@
 
 import THREE from 'three';
+import Vector3 from '../../game/physics/base/Vector3';
 
 export default class BaseThreeView {
   constructor(gameView) {
@@ -26,7 +27,7 @@ export default class BaseThreeView {
 
     function renderNext() {
       requestAnimationFrame( renderNext.bind(this) );
-      this.render();
+      this.tick();
     }
 
     renderNext.bind(this)();
@@ -41,18 +42,65 @@ export default class BaseThreeView {
   get scene() { return this._scene; }
   set scene(s) {}
 
-  setCameraTarget(gameObjectView, position, lookAt) {
-    position = position || {x: 0, y: 0, z: 0};
-    lookAt = lookAt || {x: 0, y: 1, z: 0};
-    gameObjectView.three.add(this._camera);
-    this._camera.position.set(position.x, position.y, position.z);
-    this._camera.lookAt(
-      new THREE.Vector3(lookAt.x, lookAt.y, lookAt.z)
-    );
+  setCameraHost(gameObjectView, position) {
+    this._cameraHost = gameObjectView;
+    this._hostModeCameraPosition = position;
+    if (this._cameraMode === CAMERA_MODES.HOST) {
+      this.cameraHostMode();
+    } 
   }
 
-  render() {
+  setCameraTarget(gameObjectView, distance) {
+    this._cameraTarget = gameObjectView;
+    this._targetModeHostDistance = distance;
+    if (this._cameraMode === CAMERA_MODES.TARGET) {
+      this.cameraTargetMode();
+    } 
+  }
+
+  toggleCameraMode() {
+    if (this._cameraMode === CAMERA_MODES.HOST) {
+      this.cameraTargetMode();
+    } else {
+      this.cameraHostMode();
+    }
+  }
+
+  cameraHostMode() {
+    this._cameraMode = CAMERA_MODES.HOST;
+    if (this._cameraTarget) {
+      this._cameraHost.three.add(this._camera);
+      this._camera.position.copy(this._hostModeCameraPosition);
+      this._camera.lookAt({x: 0, y: 0, z: 0});
+    }
+  }
+
+  cameraTargetMode() {
+    this._cameraMode = CAMERA_MODES.TARGET;
+    this._scene.add(this._camera);
+  }
+
+  tick() {
     this._gameView.tick();
+
+    if (this._cameraMode === CAMERA_MODES.TARGET && 
+        this._cameraTarget && this._cameraHost) {
+      var v = new THREE.Vector3(
+        this._cameraTarget.physics.position.x,
+        this._cameraTarget.physics.position.y,
+        this._cameraTarget.physics.position.z
+      );
+      v.sub(new THREE.Vector3(
+        this._cameraHost.physics.position.x,
+        this._cameraHost.physics.position.y,
+        this._cameraHost.physics.position.z
+      ));
+      v.setLength(-this._targetModeHostDistance);
+      v.add(this._cameraHost.three.position);
+      this._camera.position.copy(v);
+      this._camera.lookAt(this._cameraTarget.three.position);
+    }
+
     this._renderer.render(
       this._scene,
       this._camera
@@ -60,3 +108,8 @@ export default class BaseThreeView {
   }
 
 }
+
+var CAMERA_MODES = {
+  HOST: 'HOST',
+  TARGET: 'TARGET'
+};

@@ -37,4 +37,38 @@ export default class Vector3 {
     }
   }
 
+  invert() {
+    this.set(
+      {
+        x: -this.x,
+        y: -this.y,
+        z: -this.z
+      }
+    );
+    return this;
+  }
+
+  setLength(len) {
+    var current = Math.sqrt(Math.pow(this.x,2) + Math.pow(this.y,2) + Math.pow(this.z,2));
+    var fix = len / current;
+    this.set(
+      {
+        x: this.x * fix,
+        y: this.y * fix,
+        z: this.z * fix
+      }
+    );
+    return this;
+  }
+
+}
+
+Vector3.subtract = function(v1, v2) {
+  return new Vector3(
+    {
+      x: v1.x - v2.x,
+      y: v1.y - v2.y,
+      z: v1.z - v2.z
+    }
+  );
 }

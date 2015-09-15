@@ -5,10 +5,11 @@ import Shape from '../physics/Shape';
 import Vector3 from '../physics/base/Vector3';
 
 var PLANE_MASS = 500;
-var PITCH_FORCE = .5 * PLANE_MASS;
+var PITCH_FORCE = 4 * PLANE_MASS;
 var ROLL_FORCE = 4 * PLANE_MASS;
 var LIFT_FORCE = 16 * PLANE_MASS;
 var PUSH_FORCE = 8000 * PLANE_MASS;
+var BOOSTER_FORCE = PUSH_FORCE * 4;
 
 export default class PlanePhysics extends Body {
   constructor(controls) {
@@ -31,13 +32,33 @@ export default class PlanePhysics extends Body {
     setInterval(
       function() {
 
-        this.applyForce(
-          new Vector3({y: PUSH_FORCE})
-        );
+        if (controls.gyroscope) {
 
-        this.applyForce(
-          new Vector3({z: LIFT_FORCE})
-        );
+          this._cannon.linearDamping = .01;
+
+        } else {
+
+          this._cannon.linearDamping = .9;
+
+          if (controls.booster) {
+
+            this.applyForce(
+              new Vector3({y: BOOSTER_FORCE})
+            );
+
+          } else {
+
+            this.applyForce(
+              new Vector3({y: PUSH_FORCE})
+            );
+
+          }
+
+          this.applyForce(
+            new Vector3({z: LIFT_FORCE})
+          );
+
+        }
 
         if (controls.pitch) {
           this.applyForce(
@@ -84,15 +105,15 @@ function calcDrag(velocity, rotation) {
 
 */
 
-var BODY_LENGTH = 1.25;
-var BODY_THICKNESS = .4;
+var BODY_LENGTH = 4.25;
+var BODY_THICKNESS = .7;
 
 var WING_SPAN = 5;
 var WING_DEPTH = 1;
 var WING_THICKNESS = .1;
 
 var TAIL_WING_SPAN = BODY_THICKNESS + 1;
-var TAIL_WING_DEPTH = .05;
+var TAIL_WING_DEPTH = .5;
 var TAIL_WING_THICKNESS = .1;
 
 var RUDDER_SPAN = .5;
@@ -122,13 +143,13 @@ class PlaneBodyShapes {
     this.tailWing = new Shape(
       SHAPES.BOX,
       {x: TAIL_WING_SPAN, y: TAIL_WING_DEPTH, z: TAIL_WING_THICKNESS},
-      {x: 0, y: (BODY_LENGTH - TAIL_WING_DEPTH) / 2, z: 0}
+      {x: 0, y: -(BODY_LENGTH - TAIL_WING_DEPTH) / 2, z: 0}
     );
 
     this.rudder = new Shape(
       SHAPES.BOX,
       {x: RUDDER_THICKNESS, y: RUDDER_DEPTH, z: RUDDER_SPAN},
-      {x: 0, y: (BODY_LENGTH - RUDDER_DEPTH) / 2, z: (BODY_THICKNESS + RUDDER_SPAN) / 2}
+      {x: 0, y: -(BODY_LENGTH - RUDDER_DEPTH) / 2, z: (BODY_THICKNESS + RUDDER_SPAN) / 2}
     );
 
   }
