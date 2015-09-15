@@ -9,7 +9,7 @@ var ARENA_SIZE = {
   z: 8000
 };
 
-var ARENA_WALL_WIDTH = 1000;
+var ARENA_WALL_WIDTH = 100;
 
 var PLANE_SLOTS = [
   [

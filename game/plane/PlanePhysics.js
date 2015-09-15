@@ -3,19 +3,13 @@ import Body from '../physics/Body';
 import SHAPES from '../physics/SHAPES';
 import Shape from '../physics/Shape';
 import Vector3 from '../physics/base/Vector3';
-
-var PLANE_MASS = 500;
-var PITCH_FORCE = 4 * PLANE_MASS;
-var ROLL_FORCE = 4 * PLANE_MASS;
-var LIFT_FORCE = 16 * PLANE_MASS;
-var PUSH_FORCE = 8000 * PLANE_MASS;
-var BOOSTER_FORCE = PUSH_FORCE * 4;
+import CONSTANTS from './PLANE_CONSTANTS';
 
 export default class PlanePhysics extends Body {
   constructor(controls) {
     super();
 
-    this.mass = PLANE_MASS;
+    this.mass = CONSTANTS.MASS;
     this.position = {x: -400, y: 0, z: 0};
 
     // TODO: don't access cannon directly
@@ -43,42 +37,42 @@ export default class PlanePhysics extends Body {
           if (controls.booster) {
 
             this.applyForce(
-              new Vector3({y: BOOSTER_FORCE})
+              new Vector3({y: CONSTANTS.BOOSTER.FORCE})
             );
 
           } else {
 
             this.applyForce(
-              new Vector3({y: PUSH_FORCE})
+              new Vector3({y: CONSTANTS.PUSH.FORCE})
             );
 
           }
 
           this.applyForce(
-            new Vector3({z: LIFT_FORCE})
+            new Vector3({z: CONSTANTS.LIFT.FORCE})
           );
 
         }
 
         if (controls.pitch) {
           this.applyForce(
-            new Vector3({z: PITCH_FORCE * controls.pitch}),
-            new Vector3({y: 5})
+            new Vector3({z: CONSTANTS.PITCH.FORCE * controls.pitch}),
+            new Vector3({y: CONSTANTS.PITCH.OFFSET})
           );
           this.applyForce(
-            new Vector3({z: -PITCH_FORCE * controls.pitch}),
-            new Vector3({y: -5})
+            new Vector3({z: -CONSTANTS.PITCH.FORCE * controls.pitch}),
+            new Vector3({y: -CONSTANTS.PITCH.OFFSET})
           );
         }
 
         if (controls.roll) {
           this.applyForce(
-            new Vector3({z: ROLL_FORCE * controls.roll}),
-            new Vector3({x: 5})
+            new Vector3({z: CONSTANTS.ROLL.FORCE * controls.roll}),
+            new Vector3({x: CONSTANTS.ROLL.OFFSET})
           );
           this.applyForce(
-            new Vector3({z: -ROLL_FORCE * controls.roll}),
-            new Vector3({x: -5})
+            new Vector3({z: -CONSTANTS.ROLL.FORCE * controls.roll}),
+            new Vector3({x: -CONSTANTS.ROLL.OFFSET})
           );
         }
 
@@ -105,51 +99,36 @@ function calcDrag(velocity, rotation) {
 
 */
 
-var BODY_LENGTH = 4.25;
-var BODY_THICKNESS = .7;
-
-var WING_SPAN = 5;
-var WING_DEPTH = 1;
-var WING_THICKNESS = .1;
-
-var TAIL_WING_SPAN = BODY_THICKNESS + 1;
-var TAIL_WING_DEPTH = .5;
-var TAIL_WING_THICKNESS = .1;
-
-var RUDDER_SPAN = .5;
-var RUDDER_DEPTH = .5;
-var RUDDER_THICKNESS = .1;
-
 class PlaneBodyShapes {
   constructor() {
 
     this.body = new Shape(
       SHAPES.BOX,
-      {x: BODY_THICKNESS, y: BODY_LENGTH, z: BODY_THICKNESS}
+      {x: CONSTANTS.BODY.THICKNESS, y: CONSTANTS.BODY.LENGTH, z: CONSTANTS.BODY.THICKNESS}
     );
 
     this.topWing = new Shape(
       SHAPES.BOX,
-      {x: WING_SPAN, y: WING_DEPTH, z: WING_THICKNESS},
-      {x: 0, y: (BODY_LENGTH - WING_DEPTH) / 2, z: ((BODY_THICKNESS + WING_THICKNESS) / 2) + .5}
+      {x: CONSTANTS.WING.SPAN, y: CONSTANTS.WING.DEPTH, z: CONSTANTS.WING.THICKNESS},
+      {x: 0, y: (CONSTANTS.BODY.LENGTH - CONSTANTS.WING.DEPTH) / 2, z: ((CONSTANTS.BODY.THICKNESS + CONSTANTS.WING.THICKNESS) / 2) + .5}
     );
 
     this.bottomWing = new Shape(
       SHAPES.BOX,
-      {x: WING_SPAN, y: WING_DEPTH, z: WING_THICKNESS},
-      {x: 0, y: (BODY_LENGTH - WING_DEPTH) / 2, z: -((BODY_THICKNESS + WING_THICKNESS)/2)}
+      {x: CONSTANTS.WING.SPAN, y: CONSTANTS.WING.DEPTH, z: CONSTANTS.WING.THICKNESS},
+      {x: 0, y: (CONSTANTS.BODY.LENGTH - CONSTANTS.WING.DEPTH) / 2, z: -((CONSTANTS.BODY.THICKNESS + CONSTANTS.WING.THICKNESS)/2)}
     );
 
     this.tailWing = new Shape(
       SHAPES.BOX,
-      {x: TAIL_WING_SPAN, y: TAIL_WING_DEPTH, z: TAIL_WING_THICKNESS},
-      {x: 0, y: -(BODY_LENGTH - TAIL_WING_DEPTH) / 2, z: 0}
+      {x: CONSTANTS.TAIL.WING.SPAN, y: CONSTANTS.TAIL.WING.DEPTH, z: CONSTANTS.TAIL.WING.THICKNESS},
+      {x: 0, y: -(CONSTANTS.BODY.LENGTH - CONSTANTS.TAIL.WING.DEPTH) / 2, z: 0}
     );
 
     this.rudder = new Shape(
       SHAPES.BOX,
-      {x: RUDDER_THICKNESS, y: RUDDER_DEPTH, z: RUDDER_SPAN},
-      {x: 0, y: -(BODY_LENGTH - RUDDER_DEPTH) / 2, z: (BODY_THICKNESS + RUDDER_SPAN) / 2}
+      {x: CONSTANTS.TAIL.RUDDER.THICKNESS, y: CONSTANTS.TAIL.RUDDER.DEPTH, z: CONSTANTS.TAIL.RUDDER.SPAN},
+      {x: 0, y: -(CONSTANTS.BODY.LENGTH - CONSTANTS.TAIL.RUDDER.DEPTH) / 2, z: (CONSTANTS.BODY.THICKNESS + CONSTANTS.TAIL.RUDDER.SPAN) / 2}
     );
 
   }

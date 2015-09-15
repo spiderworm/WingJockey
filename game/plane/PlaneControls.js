@@ -16,7 +16,7 @@ export default class PlaneControls {
       var pitchBefore = this.pitch;
       this.pitch += this._autoPitch;
       this._autoPitchCorrect += this.pitch - pitchBefore;
-      this._autoPitch *= .5;
+      this._autoPitch *= .35;
 
 
       this.roll += this._autoRollCorrect * .75;
@@ -24,7 +24,7 @@ export default class PlaneControls {
       var rollBefore = this.roll;
       this.roll -= this._autoRoll;
       this._autoRollCorrect -= this.roll - rollBefore;
-      this._autoRoll *= .5;
+      this._autoRoll *= .35;
     }.bind(this),30);
   }
 
