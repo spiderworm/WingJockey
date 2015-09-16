@@ -1,8 +1,10 @@
 
+import Eventer from '../../shared/Eventer';
 import Collection from '../../shared/Collection';
 
-export default class BaseGame {
+export default class BaseGame extends Eventer {
   constructor(arena) {
+    super();
     this._arena = arena;
     this._objects = new Collection();
     this._objects.add('arena', arena);

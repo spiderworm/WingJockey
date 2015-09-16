@@ -7,4 +7,8 @@ export default class Ball extends BaseBall {
     var physics = new BallPhysics();
     super(physics);
   }
+
+  reset() {
+    this.physics.reset();
+  }
 }
